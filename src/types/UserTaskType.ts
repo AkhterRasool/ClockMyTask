@@ -1,8 +1,7 @@
 
 
-export type UserTask = {
+export type UserTaskType = {
     taskName: string
     minutes: number
     seconds: number
-    isActive: boolean
 }

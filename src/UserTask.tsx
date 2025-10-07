@@ -1,8 +1,12 @@
 import {Timer} from "./Timer.tsx";
-import {useCallback, useState} from "react";
-import type {UserTask as UserTaskType} from "./types/UserTask.ts";
+import {useCallback} from "react";
+import type {UserTaskType} from "./types/UserTaskType.ts";
 
-const UserTask = ({taskDetail}: { taskDetail: UserTaskType }) => {
+const UserTask = ({taskDetail, setActiveTask, isActive}: {
+    taskDetail: UserTaskType,
+    setActiveTask: (taskDetail: UserTaskType | null) => void,
+    isActive: boolean,
+}) => {
 
     const updateMinutes = useCallback((currentMinute: number) => {
         taskDetail.minutes = currentMinute
@@ -12,14 +16,19 @@ const UserTask = ({taskDetail}: { taskDetail: UserTaskType }) => {
         taskDetail.seconds = currentSecond
     }, [taskDetail]);
 
-    const [active, setActive] = useState<boolean>(taskDetail.isActive)
 
     return <p>
         <span>{taskDetail.taskName}</span>&nbsp;
-        <Timer ongoing={active} givenMinutes={taskDetail.minutes} updateMinutes={(val) => updateMinutes(val)}
+        <Timer ongoing={isActive} givenMinutes={taskDetail.minutes} updateMinutes={(val) => updateMinutes(val)}
                givenSeconds={taskDetail.seconds}
                updateSeconds={val => updateSeconds(val)}></Timer>&nbsp;
-        <button onClick={() => setActive(activeVal => !activeVal)}> {active ? "Pause" : "Resume"} </button>
+        <button onClick={() => {
+            if (isActive) {
+                setActiveTask(null)
+            } else {
+                setActiveTask(taskDetail)
+            }
+        }}> {isActive ? "Pause" : "Resume"} </button>
     </p>
 }
 
