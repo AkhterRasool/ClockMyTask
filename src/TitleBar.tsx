@@ -1,31 +1,41 @@
-import {useState} from "react";
+import {useCallback, useState} from "react";
 import type {UserTaskType} from "./types/UserTaskType.ts";
 
 
-export function TitleBar({userTasks, setTasks, setActiveTask, updateNotification}: {
+export function TitleBar({userTasks, setActiveTask, updateNotification, setTasks}: {
     userTasks: UserTaskType[],
-    setTasks: (param: UserTaskType[]) => void,
     setActiveTask: (newTask: UserTaskType) => void,
-    updateNotification: (notification: string) => void
+    updateNotification: (notification: string) => void,
+    setTasks: (value: (((prevState: UserTaskType[]) => UserTaskType[]) | UserTaskType[])) => void
 }) {
 
-    const [tentativeTask, setTentativeTask] = useState<string>("")
+    const [taskName, setTaskName] = useState<string>("")
+
+    const addTask = useCallback((givenTaskName: string) => {
+        if (givenTaskName) {
+            setTaskName("")
+            if (userTasks.map(task => task.taskName).includes(givenTaskName)) {
+                updateNotification(`Task '${givenTaskName}' is already created.`)
+                return
+            }
+            const activeTask = {taskName: givenTaskName, minutes: 0, seconds: 0}
+            setTasks(currTasks => [...currTasks, activeTask]);
+            setActiveTask(activeTask);
+        }
+    }, [setActiveTask, updateNotification, userTasks, setTasks]);
 
     return <div>
-        <input type='text' placeholder='Enter task name here.' value={tentativeTask} onChange={e => setTentativeTask(e.target.value)}/>
-        <button onClick={() => {
-            if (tentativeTask) {
-                setTentativeTask("")
-                if (userTasks.map(task => task.taskName).includes(tentativeTask)) {
-                    updateNotification(`Task '${tentativeTask}' is already created.`)
-                    return
-                }
-                const activeTask = {taskName: tentativeTask, minutes: 0, seconds: 0}
-                setTasks([...userTasks, activeTask]);
-                setActiveTask(activeTask);
-            }
-        }}>Add Task
-        </button>
+        <input type='text' placeholder='Enter task name here.'
+               value={taskName}
+               onChange={e => setTaskName(e.target.value)}
+               autoFocus={true}
+               onKeyDown={(e) => {
+                   if (e.key === "Enter") {
+                       addTask(taskName)
+                   }
+               }}/>
+
+        <button onClick={() => addTask(taskName)}>Add Task</button>
     </div>
 
 }
