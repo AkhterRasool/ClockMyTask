@@ -2,11 +2,12 @@ import {useCallback, useState} from "react";
 import type {UserTaskType} from "./types/UserTaskType.ts";
 
 
-export function TitleBar({userTasks, setActiveTask, updateNotification, setTasks}: {
+export function TitleBar({userTasks, setActiveTask, updateNotification, setTasks, setFocusedTaskIndex}: {
     userTasks: UserTaskType[],
     setActiveTask: (newTask: UserTaskType) => void,
     updateNotification: (notification: string) => void,
-    setTasks: (value: (((prevState: UserTaskType[]) => UserTaskType[]) | UserTaskType[])) => void
+    setTasks: (value: (((prevState: UserTaskType[]) => UserTaskType[]) | UserTaskType[])) => void,
+    setFocusedTaskIndex: (value: (((prevState: number) => number) | number)) => void
 }) {
 
     const [taskName, setTaskName] = useState<string>("")
@@ -21,13 +22,14 @@ export function TitleBar({userTasks, setActiveTask, updateNotification, setTasks
             const activeTask = {taskName: givenTaskName, minutes: 0, seconds: 0}
             setTasks(currTasks => [...currTasks, activeTask]);
             setActiveTask(activeTask);
+            setFocusedTaskIndex(userTasks.length)
         }
-    }, [setActiveTask, updateNotification, userTasks, setTasks]);
+    }, [setActiveTask, updateNotification, userTasks, setTasks, setFocusedTaskIndex]);
 
     return <div>
         <input type='text' placeholder='Enter task name here.'
                value={taskName}
-               onChange={e => setTaskName(e.target.value)}
+               onChange={e => setTaskName(e.target.value.trim())}
                autoFocus={true}
                onKeyDown={(e) => {
                    if (e.key === "Enter") {
