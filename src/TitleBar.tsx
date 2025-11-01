@@ -1,5 +1,8 @@
 import {useCallback, useState} from "react";
 import type {UserTaskType} from "./types/UserTaskType.ts";
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
+import './css/TitleBar.css'
 
 
 export function TitleBar({userTasks, setActiveTask, updateNotification, setTasks, setFocusedTaskIndex}: {
@@ -26,8 +29,8 @@ export function TitleBar({userTasks, setActiveTask, updateNotification, setTasks
         }
     }, [setActiveTask, updateNotification, userTasks, setTasks, setFocusedTaskIndex]);
 
-    return <div>
-        <input type='text' placeholder='Enter task name here.'
+    return <div id='title-bar'>
+        <TextField id='task-input-field' type='text' placeholder='Enter task name here.'
                value={taskName}
                onChange={e => setTaskName(e.target.value.trim())}
                autoFocus={true}
@@ -37,7 +40,7 @@ export function TitleBar({userTasks, setActiveTask, updateNotification, setTasks
                    }
                }}/>
 
-        <button onClick={() => addTask(taskName)}>Add Task</button>
+        <Button id="add-task-button" onClick={() => addTask(taskName)} variant="outlined" disableRipple={true}>Add task</Button>
     </div>
 
 }

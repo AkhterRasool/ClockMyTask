@@ -43,12 +43,12 @@ function App() {
     }, [tasks, focusedTaskIndex]);
 
     return (
-        <>
+        <div id='app-contents'>
             <Notification notificationText={notificationText}/>
             <TitleBar userTasks={tasks} setTasks={setTasks} setActiveTask={setActiveTask}
                       updateNotification={updateNotification} setFocusedTaskIndex={setFocusedTaskIndex}/>
             <TaskList userTasks={tasks} activeTask={activeTask} setActiveTask={setActiveTask} focusedTaskIndex={focusedTaskIndex}/>
-        </>
+        </div>
     )
 }
 

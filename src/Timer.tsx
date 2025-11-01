@@ -40,8 +40,8 @@ export function Timer({
     }, [seconds, minutes, updateMinutes, updateSeconds]);
 
     return <>
-        {minutes > 0 && <span>{minutes}m&nbsp;</span>}
-        {seconds > 0 && <span>{seconds}s</span>}
+        <span>{String(minutes).padStart(2, '0')}:</span>
+        <span>{String(seconds).padStart(2, '0')}</span>
     </>
 
 }

@@ -1,6 +1,9 @@
 import {Timer} from "./Timer.tsx";
 import {useCallback} from "react";
 import type {UserTaskType} from "./types/UserTaskType.ts";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import PauseCircleFilledRoundedIcon from '@mui/icons-material/PauseCircleFilledRounded';
+import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 
 const UserTask = ({taskDetail, setActiveTask, isActive}: {
     taskDetail: UserTaskType,
@@ -28,7 +31,14 @@ const UserTask = ({taskDetail, setActiveTask, isActive}: {
             } else {
                 setActiveTask(taskDetail)
             }
-        }}> {isActive ? "Pause" : "Resume"} </button>
+        }}>
+            {isActive && <PauseCircleFilledRoundedIcon/>}
+            {isActive || <PlayArrowRoundedIcon/>}
+        </button>
+
+        <button>
+            <DeleteForeverIcon/>
+        </button>
     </p>
 }
 
